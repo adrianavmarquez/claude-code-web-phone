@@ -1,0 +1,7 @@
+# Python virtual environment for Composio SDK
+.composio-venv/
+
+# Python
+__pycache__/
+*.py[cod]
+.env
