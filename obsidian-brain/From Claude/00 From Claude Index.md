@@ -17,8 +17,7 @@ reference layer** that sits underneath the curated brain — the curated notes i
 |---|---|
 | **Condensed Memory/** | Claude's auto-condensed memory per in-scope project + account-wide. Dense and current — the single richest source. |
 | **Project Knowledge/** | Full knowledge docs Adriana loaded into her Claude projects (Adrianavmarquez Advertising Ideation, Advertising Copywriting, Creatividad², Motion 2026 Study Session). |
-| **Chat Archive/In-scope/** | One `.md` per chat classified as clearly in-scope. |
-| **Chat Archive/Review/** | Ambiguous / untitled chats — quarantined for you to sort, not auto-filed. |
+| **Chat Archive/In-scope/** | One `.md` per chat with real content (includes 4 chats approved from Review). |
 | **_Extraction Report.md** | Counts + the list of chats excluded for mentioning other ventures. |
 
 ## Highest-value reads
@@ -34,8 +33,11 @@ reference layer** that sits underneath the curated brain — the curated notes i
   them were left out (titles listed in the Extraction Report), and any incidental line
   referencing them was **redacted** → `[line redacted — references an out-of-scope venture]`.
 - Conversations in this export carry **no project link**, so chats were routed by
-  **content classification**, not by project. Anything the classifier couldn't place
-  confidently went to **Review/** rather than into the brain.
+  **content classification**, not by project. The Review queue has been fully triaged
+  (approved chats moved to In-scope, the rest deleted).
+- **Empty chats:** conversations that exported from Claude with **no message text at the
+  source** (Claude omits bodies for some chats — often voice or attachment-only threads)
+  were **deleted permanently**. This was a limitation of Claude's export, not the converter.
 
 ## Curated notes this archive fed
 [[Positioning & Manifesto]] · [[Copywriting Principles]] · [[Working With Claude]] ·
