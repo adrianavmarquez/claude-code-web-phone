@@ -96,6 +96,14 @@ def msg_text(m):
     return ("\n\n".join(parts) or (m.get("text") or "")).strip()
 
 
+def convo_text_len(c):
+    """Total readable text across a conversation's messages."""
+    n = 0
+    for m in (c.get("chat_messages") or []):
+        n += len(msg_text(m))
+    return n
+
+
 def chat_blob(c):
     t = (c.get("name") or "") + " \n " + (c.get("summary") or "")
     for m in (c.get("chat_messages") or [])[:3]:
@@ -214,10 +222,20 @@ def main():
 
     # ---- conversations ----
     conv = json.load(open(os.path.join(args.export, "conversations.json")))
+    report["chat_empty"] = []
     for c in conv:
         k = classify(c)
         if k == "EXCLUDED":
             report["chat_excluded"].append(c.get("name") or "(untitled)")
+            continue
+        # Chats that came through empty in the Claude export -> manifest, not blank files.
+        if convo_text_len(c) == 0:
+            report["chat_empty"].append({
+                "name": c.get("name") or "(untitled)",
+                "date": date_only(c.get("created_at")),
+                "summary": c.get("summary") or "",
+                "uuid": c.get("uuid", ""),
+            })
             continue
         title, md = render_chat(c)
         prefix = date_only(c.get("created_at"))
@@ -227,6 +245,8 @@ def main():
             f.write(md)
         report["chat_in" if k == "IN" else "chat_review"] += 1
 
+    # Empty-in-export chats are skipped silently (counted in the report only).
+
     # ---- report ----
     lines = ["---", "title: Extraction Report", "tags: [claude, report]", "---", "",
              "# From Claude — Extraction Report", "",
@@ -234,6 +254,7 @@ def main():
              f"- Condensed memory notes: **{report['memories']}**",
              f"- Chats → In-scope: **{report['chat_in']}**",
              f"- Chats → Review (ambiguous/untitled): **{report['chat_review']}**",
+             f"- Chats empty in the export (no content at source, skipped): **{len(report.get('chat_empty', []))}**",
              f"- Chats excluded (mention excluded businesses): **{len(report['chat_excluded'])}**", "",
              "## In-scope projects mined", ""]
     lines += [f"- {n}" for n in sorted(set(report["projects_in"])) if n.strip()]
