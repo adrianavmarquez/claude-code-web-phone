@@ -29,26 +29,33 @@ factual, and cross-linked so both Adriana and Claude can load context fast.
 - [[Story & Self-Concept]] — migration arc, "La Depuración", what she is *not*
 
 ### Brand
+- [[Positioning & Manifesto]] — Creative Marketing Strategist, Anti-Strategy, the manifesto
 - [[Content Pillars]] — the 4 pillars she creates around
-- [[Brand Guide]] — visual identity, colors, aesthetic, gear
+- [[Brand Guide]] — visual identity, colors, typography, gear
 - [[Brand Analysis System]] — her @adrianavmarquez market-research engine
 
 ### Methodology — *her IP*
 - [[Content Creation Method]] — idea → guion → producción → edición → posting
+- [[Copywriting Principles]] — the VOC quality filter + proprietary frameworks
 - [[Creator Maturity Model]] — the 6-bucket self-diagnostic
 - [[Hook System]] — the 3-mode hook framework
 - [[Coaching Framework]] — the 5-block 1:1 discovery method
+- [[Working With Claude]] — how she wants an AI to work with her *(read before producing)*
 
 ### Offers
 - [[Creatividad2 Course]] — flagship course + the diagnostic funnel
 - [[1-1 Advising]] — Asesorías 1:1 / Strategy Sprint
+- [[Advisory Services & Rates]] — pricing ladder + brand-deal rate rules
 
 ### Operating system
 - [[Goals & Cadence]] — 2026 goals, words of the month, rituals
 - [[Weekly Content Schedule]] — the standing publishing grid
+- [[Platform Playbook 2026]] — how TikTok/IG/YouTube distribute + the metric that matters
 
 ### Reference
 - [[Notion Source Map]] — where each cluster lives in Notion + what's excluded
+- [[From Claude/00 From Claude Index|From Claude Archive]] — full chat archive + project
+  docs + condensed memories extracted from the Claude.ai export
 
 ---
 *Scope: 📱 Adriana Marquez · 🤳🏻 @adrianavmarquez · 🫂 community resources ·

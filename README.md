@@ -1,5 +1,24 @@
 # claude-code-web-phone
 
+Adriana Márquez's **Obsidian brain** — a distilled, Claude-optimized memory built
+from her Notion workspace and Claude.ai export — plus the tools that produce it.
+
+## What's here
+
+- **[`obsidian-brain/`](obsidian-brain/)** — the actual vault. Open it in Obsidian
+  (*Open folder as vault*) and start at `00 START HERE.md`. A curated, cross-linked
+  memory layer over a full `From Claude/` archive. Scope is Adriana's personal/brand
+  areas only; other ventures are walled off.
+- **`extract_claude_export.py`** — turns a Claude.ai data export (newer format:
+  `conversations.json` + `projects/` + `memories.json`) into the `From Claude/` archive,
+  classifying chats in-scope vs excluded so nothing off-limits leaks in.
+- **`claude_to_obsidian.py`** — a general-purpose converter for the older single-file
+  export shape (documented below).
+
+---
+
+## `claude_to_obsidian.py` — general Claude.ai chat → Obsidian converter
+
 Export your Claude.ai chats into an **Obsidian vault** — one Markdown note per
 chat, grouped into per-project folders — instead of settling for the lossy,
 condensed Project "memory".

@@ -17,13 +17,21 @@ expression are the anchor of every thumbnail.
   presence — documenting a professional process and showing **criterion**, not just tips.
   *"Los tips son universales. El criterio es propietario."*
 
-## Colors (from Creatividad² / Quiz brand system)
-- **Red** `#D72323` — primary accent / CTA / the "bottleneck" signal
-- **Yellow** `#FFBA35` — secondary / "areas to improve"
-- **Blue** `#3846C4` — brand blue
-- Lavender — calm/"healthy" states
-- **Typeface:** Poppins (Bold / Black for heroes)
-- Brand marks: the small monogram, a red star sticker, doodles (little stars, pluses, pixel art)
+## Colors (brand system)
+- **Red** `#D72323` — most active: logo star, section titles, closing blocks, CTAs, "bottleneck" signal
+- **Yellow** `#FFBA35` — CTA-exclusive / "areas to improve"
+- **Blue** `#3846C4` — atmosphere / secondary text / table headers
+- **Lavender** `#F2E9FF` — calm / "healthy" states
+- **Black** `#000000` (`#080808`) · **White** `#FFFFFF`
+
+## Typography
+- **Poppins** Bold/Black — titles
+- **Scholar** — subtitles · **Heading Now** (61–68) — body · **Glenda Sans** — captions
+- **Plunct** — personality/hand-drawn · **Pixelify Sans** — mixed media · **KG Makes You Stronger** — cursive/handwritten
+
+## Logo & marks
+- **Star-with-AM** device; *isótopos* (5 color variants) and *isologotipos* (4 variants).
+- Brand doodles: little stars, pluses, pixel art. Wordmark: *adrianav✦marquez · creatividad²*.
 
 ## Thumbnails
 - Minimalist but eye-catching; **short text in CAPS (max 5–7 words)**; high contrast.
@@ -35,9 +43,16 @@ expression are the anchor of every thumbnail.
 ## Platforms
 TikTok · Instagram · Pinterest · YouTube
 
-## Gear & tools
-- **Cameras:** Sony ZV-E1, Sony A7C II, DJI Osmo Pocket 3, Sony RX100, Fujifilm X-E5
-- **Editing:** CapCut, Photoshop, Premiere (DaVinci soon)
-- **Org:** Notion · automation with **n8n** · ManyChat for DMs
+## Gear & tools (current kit)
+- **Video cameras:** Sony A7C II (primary/tripod/talking heads) · ZV-E1 (run-and-gun) ·
+  Osmo Pocket 3 (impossible angles) · Osmo Action 6 (POV/water) · Fujifilm X-E5 + Fujinon
+  23mm (film sims) · Sony RX100 VII (pocket) · Canon ELPH 360 (discreet) · iPhone 17 Pro Max (ProRes)
+- **Photo only:** Sony A7R V 61MP (don't use for video without controlled light)
+- **Sony lenses:** 14mm GM f/1.8 · 11mm APS-C f/1.8 · 20mm GM f/1.8 · 28–60mm f/4–5.6 ·
+  50mm f/1.8 (everyday) · 24–70mm GM f/2.8 · 90mm Macro G f/2.8
+- **Editing:** CapCut · DaVinci Resolve · Photoshop · Premiere · Higgsfield AI
+- **Stack:** Notion (calendar + Brand Brain CRM) · n8n (automation) · ManyChat (DMs) ·
+  MailerLite (email) · Reclaim AI (calendar) · Gumroad → own site (sales) · Metricool · Canva
+- **CD reference libraries:** Shotdeck, Frameset, Eyecannndy, Cosmos, Savee, Are.na
 
 See also: [[Content Pillars]] · [[Brand Analysis System]] · [[Hook System]]

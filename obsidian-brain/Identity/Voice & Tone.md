@@ -23,6 +23,21 @@ natural Spanglish, imperfect on purpose.
 - Softer fillers she reaches for: *"eh"*, *"¿si me explico?"*, *"ay no sé"*.
 - Tip sign-off: *"y de nuevo, espero esto te sirva, nos vemos manianaa"*.
 
+## Caribbean Spanglish lexicon (current)
+- **Register:** Caribbean Spanglish — Spanish-dominant, English industry terms left in English.
+- **Uses *tuteo*, not *voseo*** (important for client-facing copy in her voice).
+- **Uses "cuadra"** (never "calza") for things that fit / match.
+- Natural vocabulary: *bebe, full, burda, destrincar, bien jodido, hasta las trancas,
+  fácil y raspao, mi reinis*.
+- Self-deprecating humor is **intentional and authentic — do not polish it away.**
+
+## Platform-specific voice rules
+- **TikTok only** closing: **"nos vemos manianaaa ✨"** (never on LinkedIn, YouTube, Pinterest).
+- Email / message sign-offs: simple — *"Un abrazo, Adriana"*. **Never** *"desde la Queen City."*
+- **No em dashes anywhere** — periods, commas, or colons instead.
+- Professional / client-facing content stays in **English**; organic social flows bilingual.
+- Organic/DM voice is casual, humble, dry-humored.
+
 ## Writing rules
 - **Max 1 strong filler** per piece of content.
 - **Hook in the first 3 seconds** (visual or textual).

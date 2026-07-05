@@ -8,9 +8,16 @@ updated: 2026-07-05
 
 # Who Is Adriana
 
-**One line:** Adriana Márquez — Venezuelan creative, 28, living in Charlotte, NC —
-who helps overwhelmed creative women turn scattered ideas and untapped talent into
-content they actually publish.
+**One line:** Adriana Márquez — Venezuelan **Creative Marketing Strategist**, 28, in
+Charlotte, NC — who helps overwhelmed creative women (and Latino brands) turn scattered
+ideas and untapped talent into content they actually publish.
+
+> [!info] Current positioning (2026)
+> **Creative Marketing Strategist** + content creator + personal-brand consultant.
+> ~50–65K followers, Spanish-first for the **US Latino market + Mexico, Spain,
+> Venezuela, Colombia**. Manifesto: *"My enemy is whoever hoards knowledge and doesn't
+> share it with the masses."* Ethos: *"te sacudo, no te consiento."*
+> See [[Positioning & Manifesto]].
 
 ## Core facts
 - **Name:** Adriana Márquez (brand handle **@adrianavmarquez**, wordmark *adrianav✦marquez · creatividad²*)

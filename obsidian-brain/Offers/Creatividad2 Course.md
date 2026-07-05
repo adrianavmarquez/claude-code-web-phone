@@ -35,4 +35,19 @@ creative woman to go from idea to posted video without overcomplicating it.
 - Quiz de Autoanálisis (the diagnostic) · Generador de ideas de contenido personalizado ·
   Video Golden Nuggets · Curso desarrollo (the syllabus above).
 
+## Current build state (from Claude memory, 2026)
+- **Ecosystem, not one product:** free diagnostic → evergreen low-ticket course →
+  workshops/bootcamp → community → selective 1:1. Positioned at **Client B** for launch.
+- **Community:** on **Circle** (newly set up). **Course platform:** **Teachable** (Pro).
+- **Content pillar series:** *"Recursos con Criterio"* / *"Pasa el Filtro"* (name TBD);
+  Pinterest episode leads. Core thesis: *Pinterest gives pre-composed references;
+  creative direction needs raw material so the creator's own mind connects the dots.*
+- **Skill system:** ~**16 SKILL.md** files built inside her Claude projects (identity,
+  monthly content architecture, per-format scripting, website-audit framework), all
+  written creator-agnostic (*"el creador"*) to reuse across brands.
+- **Open decision:** course pricing has an unresolved April-vs-June inconsistency to close
+  before launch assets are finalized.
+- Sales moving **Gumroad → own site** (adrianavmarquez.com); email via MailerLite with
+  auto-segmentation by diagnosed bucket.
+
 See also: [[Content Creation Method]] · [[Creator Maturity Model]] · [[1-1 Advising]]

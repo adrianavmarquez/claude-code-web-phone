@@ -30,13 +30,25 @@ hairball. This brain fixes that:
 obsidian-brain/
 ├── 00 START HERE.md          ← the map, read this first
 ├── Identity/                 Who Is Adriana · Voice & Tone · Story & Self-Concept
-├── Brand/                    Content Pillars · Brand Guide · Brand Analysis System
-├── Methodology/              Content Creation Method · Creator Maturity Model ·
-│                             Hook System · Coaching Framework
-├── Offers/                   Creatividad2 Course · 1-1 Advising
-├── Operating System/         Goals & Cadence · Weekly Content Schedule
-└── Reference/                Notion Source Map  ← index + what's excluded + how to expand
+├── Brand/                    Positioning & Manifesto · Content Pillars · Brand Guide ·
+│                             Brand Analysis System
+├── Methodology/              Content Creation Method · Copywriting Principles ·
+│                             Creator Maturity Model · Hook System · Coaching Framework ·
+│                             Working With Claude
+├── Offers/                   Creatividad2 Course · 1-1 Advising · Advisory Services & Rates
+├── Operating System/         Goals & Cadence · Weekly Content Schedule · Platform Playbook 2026
+├── Reference/                Notion Source Map  ← index + what's excluded + how to expand
+└── From Claude/              Full archive from the Claude.ai export:
+                              Condensed Memory/ · Project Knowledge/ · Chat Archive/
+                              (see "From Claude/00 From Claude Index.md")
 ```
+
+## Two layers
+
+- **Curated brain** (Identity → Reference) — distilled, cross-linked notes. Read these first.
+- **`From Claude/`** — the raw reference layer: full chat archive, project knowledge docs,
+  and Claude's condensed per-project memories, extracted from the account data export and
+  filtered to in-scope areas. The curated notes distill from here.
 
 ## Scope
 
