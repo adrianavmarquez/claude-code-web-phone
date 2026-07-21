@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bulk HVAC · Reporte de Inspección</title>
+<style>
+  :root{
+    --navy:#0D1F3C; --amber:#F0A500; --yellow:#FFC234;
+    --ink:#1A2233; --mute:#6B7480; --hair:#D9DEE7; --tint:#F4F6FA; --tint2:#EDEFF4;
+    --green:#2E7D46; --red:#C0392B;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:#525a66;color:var(--ink);
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+  .serif{font-family:Georgia,'Times New Roman',serif;}
+
+  /* ---------- toolbar (screen only) ---------- */
+  .toolbar{position:sticky;top:0;z-index:50;display:flex;gap:10px;align-items:center;
+    justify-content:center;flex-wrap:wrap;padding:12px;background:#0b1526;
+    box-shadow:0 2px 14px rgba(0,0,0,.35);}
+  .toolbar .grp{display:flex;gap:6px;align-items:center;}
+  .toolbar button{font:inherit;font-size:13px;font-weight:600;cursor:pointer;border:none;
+    padding:9px 16px;border-radius:8px;transition:.15s;}
+  .btn-lang{background:#1c2b45;color:#aeb8c8;}
+  .btn-lang.active{background:var(--amber);color:var(--navy);}
+  .btn-print{background:var(--amber);color:var(--navy);}
+  .btn-print:hover{background:var(--yellow);}
+  .btn-ghost{background:transparent;color:#8b95a6;border:1px solid #2a3856 !important;}
+  .toolbar .hint{color:#7a8497;font-size:12px;width:100%;text-align:center;margin-top:2px;}
+
+  /* ---------- page sheet ---------- */
+  .sheet{width:8.5in;min-height:11in;margin:22px auto;background:#fff;position:relative;
+    box-shadow:0 10px 40px rgba(0,0,0,.28);display:flex;flex-direction:column;}
+  .pad{padding:0.75in;flex:1;display:flex;flex-direction:column;}
+
+  /* ---------- brand bands ---------- */
+  .band{background:var(--navy);color:#fff;text-align:center;}
+  .band-brand{padding:24px 20px 20px;}
+  .band-brand .logo{font-size:48px;font-weight:900;letter-spacing:.01em;color:var(--yellow);margin:0;line-height:.95;}
+  .band-brand .sub{font-size:13px;font-weight:700;letter-spacing:.36em;color:#fff;margin:6px 0 13px;padding-left:.36em;}
+  .band-brand .bar{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--yellow);margin:0;opacity:.92;}
+  .rule-amber{height:9px;background:var(--amber);}
+
+  /* ---------- cover ---------- */
+  .cover-body{flex:1;display:flex;flex-direction:column;justify-content:center;
+    align-items:center;text-align:center;padding:24px 0;}
+  .eyebrow{color:var(--amber);font-size:12px;font-weight:800;letter-spacing:.42em;margin:0 0 22px;}
+  .title{color:var(--navy);font-size:52px;font-weight:800;line-height:1.02;letter-spacing:.01em;margin:0;}
+  .tagline{font-size:19px;font-style:italic;color:#4A5568;margin:26px 0 0;}
+  .cover-card{width:100%;margin:44px 0 0;border-collapse:collapse;}
+  .cover-card tr td{border:2px solid #fff;}
+  .cover-card .lab{background:var(--navy);color:#fff;font-size:11px;font-weight:700;
+    letter-spacing:.09em;padding:13px 18px;width:34%;text-transform:uppercase;vertical-align:middle;}
+  .cover-card .val{background:var(--tint);padding:13px 16px;}
+  .cover-card tr:nth-child(even) .val{background:var(--tint2);}
+  .band-foot{padding:16px 20px;}
+  .band-foot .loc{font-size:11px;font-weight:700;letter-spacing:.18em;color:var(--yellow);margin:0 0 6px;}
+  .band-foot .con{font-size:11px;color:#eef;margin:0;letter-spacing:.02em;}
+
+  /* ---------- section head ---------- */
+  .sec{display:flex;align-items:center;gap:12px;margin:9px 0 5px;}
+  .sec:first-child{margin-top:4px;}
+  .sec .tick{width:6px;height:22px;background:var(--amber);border-radius:2px;flex:none;}
+  .sec h2{font-size:15px;font-weight:800;color:var(--navy);letter-spacing:.06em;margin:0;text-transform:uppercase;}
+  .intro{font-size:13.5px;color:var(--ink);margin:1px 0 3px;}
+
+  /* ---------- info grid ---------- */
+  .grid{width:100%;border-collapse:collapse;border:1px solid var(--hair);}
+  .grid td{width:50%;border:1px solid var(--hair);padding:6px 15px 7px;vertical-align:top;}
+  .flab{font-size:9.5px;font-weight:700;letter-spacing:.09em;color:var(--mute);text-transform:uppercase;margin-bottom:5px;}
+  .fval{min-height:20px;font-size:13px;border-bottom:1px solid var(--hair);padding-bottom:3px;outline:none;}
+  .fval:focus{border-bottom-color:var(--amber);background:#fffdf5;}
+
+  /* ---------- write box ---------- */
+  .writebox{border:1px solid var(--hair);border-radius:4px;min-height:36px;padding:9px 14px;
+    font-size:13px;line-height:1.7;outline:none;background:repeating-linear-gradient(
+    transparent,transparent 27px,var(--hair) 27px,var(--hair) 28px);}
+  .writebox:focus{border-color:var(--amber);background:#fffdf5;}
+  .writebox.sm{min-height:32px;}
+
+  /* ---------- inspection table ---------- */
+  .insp{width:100%;border-collapse:collapse;border:1px solid var(--hair);border-top:3px solid var(--navy);}
+  .insp thead th{background:var(--navy);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;
+    text-transform:uppercase;padding:11px 14px;text-align:left;}
+  .insp thead th.c{text-align:center;}
+  .insp tbody td{border-bottom:1px solid var(--hair);padding:5px 14px;font-size:12.5px;vertical-align:middle;}
+  .insp tbody tr:nth-child(even){background:var(--tint);}
+  .insp .area{width:42%;}
+  .insp td.area{color:var(--ink);font-weight:600;}
+  .insp td.area .asub{display:block;font-size:10px;line-height:1.35;color:var(--mute);
+    font-weight:400;font-style:italic;margin-top:2px;}
+  .insp .stat{width:20%;text-align:center;}
+  .insp .obs{width:32%;}
+  .insp .obs-in{min-height:16px;outline:none;font-size:12px;}
+  .insp .obs-in:focus{background:#fffdf5;}
+
+  .chip{appearance:none;border:none;font:inherit;font-size:11px;font-weight:700;cursor:pointer;
+    padding:5px 10px;border-radius:20px;color:#fff;background:#b8c0cc;letter-spacing:.02em;}
+  .chip[data-v="ok"]{background:var(--green);}
+  .chip[data-v="warn"]{background:var(--amber);color:var(--navy);}
+  .chip[data-v="fail"]{background:var(--red);}
+
+  .legend{display:flex;gap:26px;margin:9px 2px 0;flex-wrap:wrap;}
+  .legend span{display:flex;align-items:center;gap:8px;font-size:11.5px;font-weight:600;color:var(--navy);}
+  .legend i{width:15px;height:15px;border-radius:4px;display:inline-block;}
+
+  /* ---------- photos ---------- */
+  .photos{display:flex;flex-wrap:wrap;gap:14px;}
+  .photo{flex:0 0 calc(50% - 7px);border:1px solid var(--hair);border-radius:6px;background:var(--tint);
+    min-height:90px;display:flex;align-items:center;justify-content:center;overflow:hidden;
+    cursor:pointer;position:relative;}
+  .photo span{color:var(--mute);font-size:12px;font-style:italic;}
+  .photo img{width:100%;height:100%;object-fit:cover;display:block;}
+  .photo.filled{min-height:0;background:#fff;cursor:default;}
+  .photo.filled img{height:auto;object-fit:contain;}
+  .photo .rm{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;
+    border:none;background:rgba(13,31,60,.82);color:#fff;font-size:13px;line-height:1;cursor:pointer;
+    display:none;align-items:center;justify-content:center;}
+  .photo.filled .rm{display:flex;}
+  .photo input{display:none;}
+  .addphoto{margin-top:12px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;
+    color:var(--navy);background:#fff;border:1.5px dashed var(--amber);border-radius:8px;padding:9px 16px;}
+  .addphoto:hover{background:#FDF6E7;}
+
+  /* ---------- callout + thanks ---------- */
+  .callout{display:flex;margin:6px 0 0;border:1px solid #F3E2B8;border-radius:6px;overflow:hidden;background:#FDF6E7;}
+  .callout .bar{width:6px;background:var(--amber);flex:none;}
+  .conote{padding:10px 16px;}
+  .conote .ct{margin:0 0 5px;font-size:11px;font-weight:800;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--navy);}
+  .conote p{margin:0 0 5px;font-size:11.5px;color:#6B5A2A;line-height:1.45;}
+  .conote p:last-child{margin-bottom:0;}
+  .conote .credit{font-weight:700;color:#5A4A1E;}
+  .thanks{text-align:center;font-size:12.5px;font-style:italic;color:var(--navy);margin:8px 8px 4px;}
+
+  .foot-run{border-top:1px solid var(--hair);margin-top:auto;padding-top:8px;display:flex;
+    justify-content:space-between;align-items:center;font-size:9.5px;color:var(--mute);}
+  .foot-run b{color:var(--navy);letter-spacing:.05em;}
+
+  [contenteditable]{cursor:text;}
+  [contenteditable]:empty:before{content:attr(data-ph);color:#b6bdc9;font-style:italic;}
+
+  /* horizontal-scroll wrapper keeps wide tables as tables on small screens */
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+
+  /* native segmented status (no JS needed) */
+  .seg{display:inline-flex;gap:3px;}
+  .seg input{position:absolute;opacity:0;width:0;height:0;}
+  .seg label{width:26px;height:23px;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;
+    border:1px solid var(--hair);background:#fff;color:#aab2be;font-size:12px;font-weight:800;cursor:pointer;line-height:1;}
+  .seg label:hover{border-color:#8a94a3;}
+  .seg input:checked + label{color:#fff;}
+  .seg input.ok:checked + label{background:var(--green);border-color:var(--green);}
+  .seg input.warn:checked + label{background:var(--amber);border-color:var(--amber);color:var(--navy);}
+  .seg input.fail:checked + label{background:var(--red);border-color:var(--red);}
+
+  /* estimate link (GHL) */
+  .estbox{margin-top:2px;}
+  .estinput{width:100%;font:inherit;font-size:13px;padding:10px 12px;border:1px solid var(--hair);border-radius:7px;outline:none;margin-bottom:10px;}
+  .estinput:focus{border-color:var(--amber);background:#fffdf5;}
+  .estbtn{display:inline-block;background:var(--amber);color:var(--navy);text-decoration:none;font-weight:800;font-size:13px;
+    letter-spacing:.02em;padding:12px 22px;border-radius:9px;}
+  .estbtn:hover{background:var(--yellow);}
+  .esturl{font-size:10px;color:var(--mute);margin-top:7px;word-break:break-all;}
+
+  /* signature pads */
+  .sign{display:flex;gap:24px;margin-top:6px;flex-wrap:wrap;}
+  .sign .s{flex:1;min-width:170px;}
+  .sigpad{width:100%;height:86px;border:1px solid var(--hair);border-bottom:2px solid var(--navy);border-radius:6px;
+    background:#fff;display:block;touch-action:none;cursor:crosshair;}
+  .sigrow{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:5px;}
+  .sigcap{font-size:9px;font-weight:700;letter-spacing:.06em;color:var(--mute);text-transform:uppercase;}
+  .sigclear{font:inherit;font-size:10px;font-weight:600;color:var(--mute);background:#fff;border:1px solid var(--hair);
+    border-radius:6px;padding:3px 9px;cursor:pointer;}
+  .sigclear:hover{background:#f4f6fa;}
+  .datebox{min-height:66px;border:1px solid var(--hair);border-bottom:2px solid var(--navy);border-radius:6px;
+    padding:8px 10px;font-size:13px;outline:none;}
+  .datebox:focus{background:#fffdf5;border-bottom-color:var(--amber);}
+
+  /* ---------- responsive: iPad / tablet ---------- */
+  @media screen and (max-width:900px){
+    .sheet{width:100%;margin:0;}
+    .pad{padding:30px 26px;}
+    .band-brand .logo{font-size:42px;}
+    .title{font-size:44px;}
+  }
+  /* ---------- responsive: phone ---------- */
+  @media screen and (max-width:560px){
+    .toolbar{padding:10px;}
+    .pad{padding:20px 14px;}
+    .band-brand{padding:20px 16px 16px;}
+    .band-brand .logo{font-size:36px;}
+    .band-brand .sub{font-size:11px;letter-spacing:.28em;}
+    .band-brand .bar{font-size:8.5px;letter-spacing:.06em;}
+    .eyebrow{font-size:11px;letter-spacing:.3em;margin-bottom:16px;}
+    .title{font-size:30px;}
+    .tagline{font-size:16px;margin-top:18px;}
+    .cover-card{margin-top:30px;}
+    .cover-card .lab{font-size:9.5px;letter-spacing:.05em;padding:11px 12px;width:38%;}
+    .cover-card .val{padding:11px 12px;}
+    .band-foot .con{font-size:10px;}
+    .sec h2{font-size:14px;}
+    /* field grid → one column, easy to fill */
+    .grid,.grid tbody,.grid tr,.grid td{display:block;width:100%!important;}
+    .grid td{border:none;border-bottom:1px solid var(--hair);padding:9px 4px;}
+    .grid tr{border-bottom:2px solid var(--hair);}
+    .flab{font-size:10px;}
+    .fval{font-size:15px;min-height:24px;}
+    /* inspection table stays a table, scroll sideways */
+    .tscroll .insp{min-width:540px;}
+    .obs-in{min-height:22px;}
+    .chip{font-size:12px;padding:7px 13px;}
+    .writebox{font-size:15px;min-height:60px;}
+    .photo{flex:0 0 100%;min-height:150px;}
+    .conote p{font-size:13px;} .conote .ct{font-size:12px;}
+    .thanks{font-size:14px;}
+    .foot-run{flex-direction:column;gap:4px;align-items:flex-start;font-size:11px;}
+  }
+
+  /* ---------- print ---------- */
+  @media print{
+    @page{size:Letter;margin:0;}
+    @page report{size:Letter;margin:0.55in 0.6in;}
+    html,body{background:#fff;}
+    .toolbar{display:none !important;}
+    .sheet{margin:0;box-shadow:none;width:100%;min-height:0;}
+    .sheet.cover{height:11in;overflow:hidden;page-break-after:always;break-after:page;}
+    .sheet.report{height:auto;page:report;}
+    .sheet.report .pad{padding:0;}
+    .sec{break-inside:avoid;break-after:avoid;}
+    .callout,.legend,.sign,.estbox{break-inside:avoid;}
+    .photos{break-inside:avoid;}
+    .photo{break-inside:avoid;}
+    .insp tr{break-inside:avoid;}
+    .insp thead{display:table-header-group;}
+    .no-print{display:none !important;}
+    .photo:not(.filled){display:none !important;}
+    .photo .rm{display:none !important;}
+    .fval:focus,.writebox:focus,.obs-in:focus{background:transparent;}
+    .estbtn{border:1.5px solid var(--navy);}
+    .band,.rule-amber,.insp thead th,.legend i,.seg input:checked + label,.estbtn{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="grp">
+    <button class="btn-lang" id="es" onclick="setLang('es')">Español</button>
+    <button class="btn-lang active" id="en" onclick="setLang('en')">English</button>
+  </div>
+  <div class="grp">
+    <button class="btn-print" onclick="window.print()">⤓ Print / Save PDF</button>
+    <button class="btn-ghost" onclick="clearAll()">Clear fields</button>
+  </div>
+  <p class="hint" id="hint">Type in the fields • Tap status &amp; options to mark • Upload photos • Sign with your finger</p>
+</div>
+
+<!-- ============ PAGE 1 · COVER ============ -->
+<section class="sheet cover">
+  <div class="band band-brand">
+    <p class="logo">BULK</p>
+    <p class="sub">HVAC SERVICES</p>
+    <p class="bar" data-es="LICENCIADOS Y ASEGURADOS  ·  20+ AÑOS DE EXPERIENCIA  ·  SERVICIO BILINGÜE" data-en="LICENSED &amp; INSURED  ·  20+ YEARS OF EXPERIENCE  ·  BILINGUAL SERVICE">LICENSED &amp; INSURED  ·  20+ YEARS OF EXPERIENCE  ·  BILINGUAL SERVICE</p>
+  </div>
+  <div class="rule-amber"></div>
+
+  <div class="pad cover-body">
+    <p class="eyebrow" data-es="REPORTE DE" data-en="TECHNICAL">TECHNICAL</p>
+    <h1 class="title" data-es="DIAGNÓSTICO
+TÉCNICO" data-en="DIAGNOSTIC
+REPORT">DIAGNOSTIC<br>REPORT</h1>
+    <p class="tagline serif" data-es="Diagnóstico honesto. Sin presión. Sin sorpresas." data-en="An honest diagnosis. No pressure. No surprises.">An honest diagnosis. No pressure. No surprises.</p>
+
+    <table class="cover-card">
+      <tbody><tr><td class="lab" data-es="Cliente" data-en="Customer">Customer</td><td class="val" contenteditable="true" data-ph="—"></td></tr>
+      <tr><td class="lab" data-es="Dirección" data-en="Address">Address</td><td class="val" contenteditable="true" data-ph="—"></td></tr>
+      <tr><td class="lab" data-es="Fecha de inspección" data-en="Inspection date">Inspection date</td><td class="val" contenteditable="true" data-ph="—"></td></tr>
+      <tr><td class="lab" data-es="N° de orden / trabajo" data-en="Order / job no.">Order / job no.</td><td class="val" contenteditable="true" data-ph="—"></td></tr>
+      <tr><td class="lab" data-es="Técnico asignado" data-en="Assigned technician">Assigned technician</td><td class="val" contenteditable="true" data-ph="—"></td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="band band-foot">
+    <p class="loc">CHARLOTTE  ·  ROCK HILL  ·  LANCASTER</p>
+    <p class="con" data-es="Tel / WhatsApp: (980) 980-1683   ·   info@bulkhvac.com" data-en="Phone / WhatsApp: (980) 980-1683   ·   info@bulkhvac.com">Phone / WhatsApp: (980) 980-1683   ·   info@bulkhvac.com</p>
+  </div>
+</section>
+
+<!-- ============ PAGE 2 · REPORT ============ -->
+<section class="sheet report">
+  <div class="pad">
+    <div class="sec"><span class="tick"></span><h2 data-es="Resumen de la visita" data-en="Visit summary">Visit summary</h2></div>
+    <p class="intro" data-es="Este reporte resume el Diagnóstico de $59 realizado durante la visita y respalda el estimado de trabajo adjunto." data-en="This report summarizes the $59 Diagnostic performed during the visit and supports the attached work estimate.">This report summarizes the $59 Diagnostic performed during the visit and supports the attached work estimate.</p>
+
+    <table class="grid">
+      <tbody><tr>
+        <td><div class="flab" data-es="Cliente" data-en="Customer">Customer</div><div class="fval" contenteditable="true"></div></td>
+        <td><div class="flab" data-es="Fecha de inspección" data-en="Inspection date">Inspection date</div><div class="fval" contenteditable="true"></div></td>
+      </tr>
+      <tr>
+        <td><div class="flab" data-es="Dirección" data-en="Address">Address</div><div class="fval" contenteditable="true"></div></td>
+        <td><div class="flab" data-es="N° de orden / trabajo" data-en="Order / job no.">Order / job no.</div><div class="fval" contenteditable="true"></div></td>
+      </tr>
+      <tr>
+        <td><div class="flab" data-es="Técnico" data-en="Technician">Technician</div><div class="fval" contenteditable="true"></div></td>
+        <td><div class="flab" data-es="Licencia N°" data-en="License no.">License no.</div><div class="fval" contenteditable="true"></div></td>
+      </tr>
+      <tr>
+        <td><div class="flab" data-es="Equipo (marca / modelo)" data-en="Equipment (make / model)">Equipment (make / model)</div><div class="fval" contenteditable="true"></div></td>
+        <td><div class="flab" data-es="Antigüedad aprox." data-en="Approx. age">Approx. age</div><div class="fval" contenteditable="true"></div></td>
+      </tr>
+    </tbody></table>
+
+    <div class="sec"><span class="tick"></span><h2 data-es="Motivo de la visita" data-en="Reason for the visit">Reason for the visit</h2></div>
+    <div class="writebox" contenteditable="true" data-ph-es="Describe por qué se solicitó la visita…" data-ph-en="Describe why the visit was requested…" data-ph="Describe why the visit was requested…"></div>
+
+    <div class="sec"><span class="tick"></span><h2 data-es="Puntos evaluados en el diagnóstico" data-en="Points evaluated in the diagnostic">Points evaluated in the diagnostic</h2></div>
+    <div class="tscroll">
+    <table class="insp">
+      <thead><tr>
+        <th class="area" data-es="Área evaluada" data-en="Area evaluated">Area evaluated</th>
+        <th class="stat c" data-es="Estado" data-en="Status">Status</th>
+        <th class="obs" data-es="Observaciones" data-en="Notes">Notes</th>
+      </tr></thead>
+      <tbody id="inspBody">
+        <tr><td class="area" data-es="&lt;b&gt;Termostato y operación&lt;/b&gt;&lt;span class='asub'&gt;Ajustes, respuesta del sistema y códigos de error visibles&lt;/span&gt;" data-en="&lt;b&gt;Thermostat &amp; operation&lt;/b&gt;&lt;span class='asub'&gt;Settings, system response and any visible error codes&lt;/span&gt;"><b>Thermostat &amp; operation</b><span class="asub">Settings, system response and any visible error codes</span></td><td class="stat"><span class="seg"><input type="radio" name="s0" id="s0_ok" class="ok"><label for="s0_ok" title="Bien">✓</label><input type="radio" name="s0" id="s0_warn" class="warn"><label for="s0_warn" title="Requiere atención">!</label><input type="radio" name="s0" id="s0_fail" class="fail"><label for="s0_fail" title="Falla">✕</label></span></td><td class="obs"><div class="obs-in" contenteditable="true"></div></td></tr>
+        <tr><td class="area" data-es="&lt;b&gt;Unidad interior&lt;/b&gt;&lt;span class='asub'&gt;Filtro, evaporador, ventilador, drenaje, hielo/humedad y conexiones visibles&lt;/span&gt;" data-en="&lt;b&gt;Indoor unit&lt;/b&gt;&lt;span class='asub'&gt;Filter, evaporator, blower, drain, ice/moisture and visible connections&lt;/span&gt;"><b>Indoor unit</b><span class="asub">Filter, evaporator, blower, drain, ice/moisture and visible connections</span></td><td class="stat"><span class="seg"><input type="radio" name="s1" id="s1_ok" class="ok"><label for="s1_ok" title="Bien">✓</label><input type="radio" name="s1" id="s1_warn" class="warn"><label for="s1_warn" title="Requiere atención">!</label><input type="radio" name="s1" id="s1_fail" class="fail"><label for="s1_fail" title="Falla">✕</label></span></td><td class="obs"><div class="obs-in" contenteditable="true"></div></td></tr>
+        <tr><td class="area" data-es="&lt;b&gt;Unidad exterior&lt;/b&gt;&lt;span class='asub'&gt;Condensador, ventilador, contactor, capacitor, cableado visible, ruido y vibración&lt;/span&gt;" data-en="&lt;b&gt;Outdoor unit&lt;/b&gt;&lt;span class='asub'&gt;Condenser, fan, contactor, capacitor, visible wiring, noise and vibration&lt;/span&gt;"><b>Outdoor unit</b><span class="asub">Condenser, fan, contactor, capacitor, visible wiring, noise and vibration</span></td><td class="stat"><span class="seg"><input type="radio" name="s2" id="s2_ok" class="ok"><label for="s2_ok" title="Bien">✓</label><input type="radio" name="s2" id="s2_warn" class="warn"><label for="s2_warn" title="Requiere atención">!</label><input type="radio" name="s2" id="s2_fail" class="fail"><label for="s2_fail" title="Falla">✕</label></span></td><td class="obs"><div class="obs-in" contenteditable="true"></div></td></tr>
+        <tr><td class="area" data-es="&lt;b&gt;Componentes eléctricos&lt;/b&gt;&lt;span class='asub'&gt;Pruebas básicas de voltaje, continuidad o amperaje cuando es seguro&lt;/span&gt;" data-en="&lt;b&gt;Electrical components&lt;/b&gt;&lt;span class='asub'&gt;Basic voltage, continuity or amp-draw tests when safe&lt;/span&gt;"><b>Electrical components</b><span class="asub">Basic voltage, continuity or amp-draw tests when safe</span></td><td class="stat"><span class="seg"><input type="radio" name="s3" id="s3_ok" class="ok"><label for="s3_ok" title="Bien">✓</label><input type="radio" name="s3" id="s3_warn" class="warn"><label for="s3_warn" title="Requiere atención">!</label><input type="radio" name="s3" id="s3_fail" class="fail"><label for="s3_fail" title="Falla">✕</label></span></td><td class="obs"><div class="obs-in" contenteditable="true"></div></td></tr>
+        <tr><td class="area" data-es="&lt;b&gt;Flujo de aire&lt;/b&gt;&lt;span class='asub'&gt;Filtro, rejillas/retornos accesibles y diferencial de temperatura&lt;/span&gt;" data-en="&lt;b&gt;Airflow&lt;/b&gt;&lt;span class='asub'&gt;Filter, accessible grilles/returns and temperature differential&lt;/span&gt;"><b>Airflow</b><span class="asub">Filter, accessible grilles/returns and temperature differential</span></td><td class="stat"><span class="seg"><input type="radio" name="s4" id="s4_ok" class="ok"><label for="s4_ok" title="Bien">✓</label><input type="radio" name="s4" id="s4_warn" class="warn"><label for="s4_warn" title="Requiere atención">!</label><input type="radio" name="s4" id="s4_fail" class="fail"><label for="s4_fail" title="Falla">✕</label></span></td><td class="obs"><div class="obs-in" contenteditable="true"></div></td></tr>
+        <tr><td class="area" data-es="&lt;b&gt;Sistema de refrigerante&lt;/b&gt;&lt;span class='asub'&gt;Lecturas de presión/temperatura cuando el síntoma lo permite. Diagnosticar no incluye cargar refrigerante.&lt;/span&gt;" data-en="&lt;b&gt;Refrigerant system&lt;/b&gt;&lt;span class='asub'&gt;Pressure/temperature readings when the symptom allows. Diagnosing does not include adding refrigerant.&lt;/span&gt;"><b>Refrigerant system</b><span class="asub">Pressure/temperature readings when the symptom allows. Diagnosing does not include adding refrigerant.</span></td><td class="stat"><span class="seg"><input type="radio" name="s5" id="s5_ok" class="ok"><label for="s5_ok" title="Bien">✓</label><input type="radio" name="s5" id="s5_warn" class="warn"><label for="s5_warn" title="Requiere atención">!</label><input type="radio" name="s5" id="s5_fail" class="fail"><label for="s5_fail" title="Falla">✕</label></span></td><td class="obs"><div class="obs-in" contenteditable="true"></div></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="legend">
+      <span><i style="background:var(--green)"></i><em class="i18n" data-es="Bien" data-en="Good">Good</em></span>
+      <span><i style="background:var(--amber)"></i><em class="i18n" data-es="Requiere atención" data-en="Needs attention">Needs attention</em></span>
+      <span><i style="background:var(--red)"></i><em class="i18n" data-es="Falla encontrada" data-en="Fault found">Fault found</em></span>
+    </div>
+
+    <div class="sec"><span class="tick"></span><h2 data-es="Diagnóstico y hallazgo principal" data-en="Diagnosis &amp; primary finding">Diagnosis &amp; primary finding</h2></div>
+    <div class="writebox" contenteditable="true" data-ph-es="Explica en lenguaje claro qué se encontró y por qué…" data-ph-en="Explain in plain language what was found and why…" data-ph="Explain in plain language what was found and why…"></div>
+
+    <div class="sec"><span class="tick"></span><h2 data-es="Evidencia fotográfica" data-en="Photo evidence">Photo evidence</h2></div>
+    <div class="photos" id="photos">
+      <div class="photo" onclick="tileClick(event,this)"><span data-es="Clic para subir foto" data-en="Click to upload photo">Click to upload photo</span><button type="button" class="rm" onclick="rmPhoto(event,this)">✕</button><input type="file" accept="image/*" onchange="loadPhoto(this)"></div>
+      <div class="photo" onclick="tileClick(event,this)"><span data-es="Clic para subir foto" data-en="Click to upload photo">Click to upload photo</span><button type="button" class="rm" onclick="rmPhoto(event,this)">✕</button><input type="file" accept="image/*" onchange="loadPhoto(this)"></div>
+    </div>
+    <button class="addphoto no-print" id="addPhotoBtn" onclick="addPhoto()" data-es="+ Agregar otra foto" data-en="+ Add another photo">+ Add another photo</button>
+
+    <div class="sec"><span class="tick"></span><h2 data-es="Recomendación" data-en="Recommendation">Recommendation</h2></div>
+    <div class="writebox sm" contenteditable="true" data-ph-es="Recomendación honesta, sin presión…" data-ph-en="Honest recommendation, no pressure…" data-ph="Honest recommendation, no pressure…"></div>
+
+    <div class="sec"><span class="tick"></span><h2 data-es="Estimado detallado" data-en="Detailed estimate">Detailed estimate</h2></div>
+    <div class="estbox">
+      <input type="url" class="estinput no-print" id="estLink" oninput="syncEst()" placeholder="Paste the estimate link here (GHL / FastPayDirect)…">
+      <a class="estbtn" id="estBtn" target="_blank" rel="noopener" data-es="Ver estimado detallado →" data-en="View detailed estimate →" style="display: none;">View detailed estimate →</a>
+      <div class="esturl" id="estUrl" style="display: none;"></div>
+    </div>
+
+    <div class="callout"><div class="bar"></div>
+      <div class="conote">
+        <p class="ct" data-es="Sobre el Diagnóstico de $59" data-en="About the $59 Diagnostic">About the $59 Diagnostic</p>
+        <p class="credit" data-es="Los $59 de esta visita se acreditan al servicio de reparación o reemplazo que decidas hacer con nosotros." data-en="The $59 from this visit is credited toward the repair or replacement service you choose to do with us.">The $59 from this visit is credited toward the repair or replacement service you choose to do with us.</p>
+        <p data-es="Cubre la visita del técnico y la evaluación profesional. Reparaciones, partes, refrigerante, detección avanzada de fugas o limpieza profunda requieren tu aprobación y una cotización aparte." data-en="It covers the technician visit and professional evaluation. Repairs, parts, refrigerant, advanced leak detection or deep cleaning require your approval and a separate quote.">It covers the technician visit and professional evaluation. Repairs, parts, refrigerant, advanced leak detection or deep cleaning require your approval and a separate quote.</p>
+        <p data-es="Puedes ver el estimado detallado en el enlace de arriba. No hay ninguna obligación de proceder con la reparación o el reemplazo." data-en="You can view the detailed estimate at the link above. There is no obligation to proceed with the repair or replacement.">You can view the detailed estimate at the link above. There is no obligation to proceed with the repair or replacement.</p>
+      </div></div>
+
+    <p class="thanks serif" data-es="Gracias por confiar en nosotros. Trabajamos para darle un diagnóstico honesto — sin presión y sin sorpresas." data-en="Thank you for trusting us. We work to give you an honest diagnosis — no pressure, no surprises.">Thank you for trusting us. We work to give you an honest diagnosis — no pressure, no surprises.</p>
+
+    <div class="sec"><span class="tick"></span><h2 data-es="Firmas" data-en="Signatures">Signatures</h2></div>
+    <div class="sign">
+      <div class="s"><canvas class="sigpad" width="227" height="86"></canvas><div class="sigrow"><span class="sigcap" data-es="Firma del técnico" data-en="Technician signature">Technician signature</span><button type="button" class="sigclear no-print" onclick="clearSig(this)" data-es="Borrar" data-en="Clear">Clear</button></div></div>
+      <div class="s"><canvas class="sigpad" width="227" height="86"></canvas><div class="sigrow"><span class="sigcap" data-es="Firma del cliente" data-en="Customer signature">Customer signature</span><button type="button" class="sigclear no-print" onclick="clearSig(this)" data-es="Borrar" data-en="Clear">Clear</button></div></div>
+      <div class="s" style="flex:0 0 24%"><div class="datebox" contenteditable="true"></div><div class="sigcap" style="margin-top:5px" data-es="Fecha" data-en="Date">Date</div></div>
+    </div>
+
+    <div class="foot-run">
+      <b>BULK HVAC SERVICES</b>
+      <span data-es="Charlotte · Rock Hill · Lancaster  |  Tel/WhatsApp (980) 980-1683  |  info@bulkhvac.com" data-en="Charlotte · Rock Hill · Lancaster  |  Phone/WhatsApp (980) 980-1683  |  info@bulkhvac.com">Charlotte · Rock Hill · Lancaster  |  Phone/WhatsApp (980) 980-1683  |  info@bulkhvac.com</span>
+    </div>
+  </div>
+</section>
+
+<script>
+  var STAT = {
+    ok:   {es:'Bien',  en:'Good'},
+    warn: {es:'Atención', en:'Attention'},
+    fail: {es:'Falla', en:'Fault'},
+    none: {es:'Marcar', en:'Mark'}
+  };
+  var ORDER = ['none','ok','warn','fail'];
+  var lang = 'en';
+
+  // estimate link (GHL) → live button
+  function syncEst(){
+    var i=document.getElementById('estLink'), a=document.getElementById('estBtn'), u=document.getElementById('estUrl');
+    var v=(i.value||'').trim();
+    if(v){ if(!/^https?:\/\//i.test(v)) v='https://'+v; a.href=v; a.style.display='inline-block'; u.textContent=v; u.style.display='block'; }
+    else { a.removeAttribute('href'); a.style.display='none'; u.textContent=''; u.style.display='none'; }
+  }
+
+  function setLang(l){
+    lang = l;
+    document.getElementById('es').classList.toggle('active', l==='es');
+    document.getElementById('en').classList.toggle('active', l==='en');
+    document.documentElement.lang = l;
+    // swap static text
+    document.querySelectorAll('[data-es][data-en]').forEach(function(el){
+      if(el.hasAttribute('contenteditable')) return;
+      el.innerHTML = el.getAttribute('data-'+l);
+    });
+    // title line break
+    var ti = document.querySelector('.title');
+    ti.innerHTML = ti.getAttribute('data-'+l).replace('\n','<br>');
+    // placeholders
+    document.querySelectorAll('[data-ph-es]').forEach(function(el){ el.dataset.ph = el.getAttribute('data-ph-'+l); });
+    document.querySelectorAll('.photo:not(.filled) span').forEach(function(s){ s.textContent = PH[l]; });
+    // estimate link placeholder
+    var est=document.getElementById('estLink');
+    if(est) est.placeholder = l==='es' ? 'Pega aquí el link del estimado (GHL / FastPayDirect)…' : 'Paste the estimate link here (GHL / FastPayDirect)…';
+    // toolbar labels
+    document.querySelector('.btn-print').textContent = l==='es' ? '⤓ Imprimir / Guardar PDF' : '⤓ Print / Save PDF';
+    document.querySelector('.btn-ghost').textContent = l==='es' ? 'Limpiar campos' : 'Clear fields';
+    document.getElementById('hint').textContent = l==='es'
+      ? 'Escribe en los campos • Toca el estado y las opciones para marcar • Sube fotos • Firma con el dedo'
+      : 'Type in the fields • Tap status & options to mark • Upload photos • Sign with your finger';
+  }
+
+  // ---------- photos (static tiles + inline handlers, resilient without JS) ----------
+  var PH = { es:'Clic para subir foto', en:'Click to upload photo' };
+  function tileClick(ev,tile){ if(ev.target.classList.contains('rm')) return; tile.querySelector('input[type=file]').click(); }
+  function loadPhoto(input){
+    var f=input.files[0]; if(!f)return; var r=new FileReader();
+    r.onload=function(e){ var tile=input.parentElement; tile.classList.add('filled');
+      tile.querySelectorAll('span').forEach(function(s){ s.style.display='none'; });
+      var img=tile.querySelector('img')||document.createElement('img'); img.src=e.target.result;
+      if(!img.parentElement) tile.insertBefore(img,input); };
+    r.readAsDataURL(f);
+  }
+  function rmPhoto(ev,btn){
+    ev.stopPropagation(); ev.preventDefault(); var tile=btn.parentElement;
+    if(document.querySelectorAll('#photos .photo').length>2){ tile.remove(); return; }
+    tile.classList.remove('filled'); var img=tile.querySelector('img'); if(img) img.remove();
+    var inp=tile.querySelector('input[type=file]'); if(inp) inp.value='';
+    tile.querySelectorAll('span').forEach(function(s){ s.style.display=''; });
+  }
+  function addPhoto(){
+    var t=document.createElement('div'); t.className='photo'; t.setAttribute('onclick','tileClick(event,this)');
+    t.innerHTML='<span data-es="Clic para subir foto" data-en="Click to upload photo">'+PH[lang]+'</span>'
+      +'<button type="button" class="rm" onclick="rmPhoto(event,this)">✕</button>'
+      +'<input type="file" accept="image/*" onchange="loadPhoto(this)">';
+    document.getElementById('photos').appendChild(t);
+  }
+
+  function clearAll(){
+    document.querySelectorAll('[contenteditable]').forEach(function(el){ el.innerHTML=''; });
+    document.querySelectorAll('.seg input').forEach(function(r){ r.checked=false; });
+    var est=document.getElementById('estLink'); if(est){ est.value=''; syncEst(); }
+    document.querySelectorAll('.sigpad').forEach(function(cv){ if(cv.__ctx) cv.__ctx.clearRect(0,0,cv.width,cv.height); });
+    document.querySelectorAll('#photos .photo').forEach(function(t,i){
+      if(i>1){ t.remove(); return; }
+      t.classList.remove('filled'); var img=t.querySelector('img'); if(img) img.remove();
+      var inp=t.querySelector('input[type=file]'); if(inp) inp.value='';
+      t.querySelectorAll('span').forEach(function(s){ s.style.display=''; });
+    });
+  }
+
+  // ---- signature pads (finger / stylus / mouse) ----
+  function clearSig(btn){ var cv=btn.closest('.s').querySelector('.sigpad'); if(cv.__ctx) cv.__ctx.clearRect(0,0,cv.width,cv.height); }
+  (function initSig(){
+    document.querySelectorAll('.sigpad').forEach(function(cv){
+      var ctx=cv.getContext('2d'); var dpr=window.devicePixelRatio||1; var r=cv.getBoundingClientRect();
+      cv.width=Math.max(1,r.width)*dpr; cv.height=Math.max(1,r.height)*dpr;
+      ctx.scale(dpr,dpr); ctx.lineWidth=2; ctx.lineJoin='round'; ctx.lineCap='round'; ctx.strokeStyle='#0D1F3C';
+      cv.__ctx=ctx; var drawing=false;
+      function pos(e){ var b=cv.getBoundingClientRect(); return {x:e.clientX-b.left, y:e.clientY-b.top}; }
+      cv.addEventListener('pointerdown',function(e){ drawing=true; try{cv.setPointerCapture(e.pointerId);}catch(_){}; var p=pos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); e.preventDefault(); });
+      cv.addEventListener('pointermove',function(e){ if(!drawing) return; var p=pos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); e.preventDefault(); });
+      cv.addEventListener('pointerup',function(){ drawing=false; });
+      cv.addEventListener('pointercancel',function(){ drawing=false; });
+      cv.addEventListener('pointerleave',function(){ drawing=false; });
+    });
+  })();
+
+  // placeholder init for writeboxes + estimate button initial state
+  document.querySelectorAll('[data-ph-es]').forEach(function(el){ el.dataset.ph = el.getAttribute('data-ph-en'); });
+  syncEst();
+</script>
+
+
+</body></html>
