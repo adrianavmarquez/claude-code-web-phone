@@ -54,7 +54,7 @@
   table.t thead th{background:var(--navy);color:#fff;font-size:9px;font-weight:700;letter-spacing:.05em;
     text-transform:uppercase;padding:7px 10px;text-align:left;}
   table.t thead th.c{text-align:center;}
-  table.t tbody td{border-bottom:1px solid var(--hair);padding:4px 10px;font-size:11.5px;vertical-align:middle;}
+  table.t tbody td{border-bottom:1px solid var(--hair);padding:5px 10px;font-size:11.5px;vertical-align:middle;}
   table.t tbody tr:nth-child(even){background:var(--tint);}
   table.t .lbl{font-weight:600;color:var(--ink);}
   table.t .cell{outline:none;min-height:15px;font-size:11.5px;}
@@ -62,22 +62,30 @@
   table.t td.c{text-align:center;}
   table.t .cell:empty:before,.fval:empty:before{content:attr(data-ph);color:#b6bdc9;font-style:italic;}
 
-  .chip{appearance:none;border:none;font:inherit;font-size:10px;font-weight:700;cursor:pointer;
-    padding:4px 9px;border-radius:20px;color:#fff;background:#b8c0cc;letter-spacing:.02em;white-space:nowrap;}
-  .chip[data-v="ok"]{background:var(--green);}
-  .chip[data-v="warn"]{background:var(--amber);color:var(--navy);}
-  .chip[data-v="fail"]{background:var(--red);}
-  .chip[data-v="na"]{background:var(--slate);}
+  /* ---- native segmented status (no JS needed) ---- */
+  .seg{display:inline-flex;gap:3px;}
+  .seg input{position:absolute;opacity:0;width:0;height:0;}
+  .seg label{width:25px;height:22px;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;
+    border:1px solid var(--hair);background:#fff;color:#aab2be;font-size:11px;font-weight:800;cursor:pointer;line-height:1;}
+  .seg label:hover{border-color:var(--slate);}
+  .seg input:checked + label{color:#fff;}
+  .seg input.ok:checked + label{background:var(--green);border-color:var(--green);}
+  .seg input.warn:checked + label{background:var(--amber);border-color:var(--amber);color:var(--navy);}
+  .seg input.fail:checked + label{background:var(--red);border-color:var(--red);}
+  .seg input.na:checked + label{background:var(--slate);border-color:var(--slate);}
 
   .legend{display:flex;gap:18px;margin:8px 2px 0;flex-wrap:wrap;font-size:10.5px;font-weight:600;color:var(--navy);}
   .legend span{display:flex;align-items:center;gap:6px;} .legend i{width:12px;height:12px;border-radius:3px;}
 
-  .pills{display:flex;gap:8px;flex-wrap:wrap;}
-  .pill{appearance:none;border:1.5px solid var(--hair);background:#fff;font:inherit;font-size:11px;font-weight:600;
-    color:var(--slate);cursor:pointer;padding:6px 13px;border-radius:20px;}
-  .pill.on{background:var(--navy);border-color:var(--navy);color:#fff;}
-  .pill.on.good{background:var(--green);border-color:var(--green);}
-  .pill.on.bad{background:var(--red);border-color:var(--red);}
+  /* ---- native radio pills (no JS needed) ---- */
+  .pills{display:inline-flex;gap:8px;flex-wrap:wrap;}
+  .pills input{position:absolute;opacity:0;width:0;height:0;}
+  .pills label{border:1.5px solid var(--hair);background:#fff;font-size:11px;font-weight:600;
+    color:var(--slate);cursor:pointer;padding:6px 13px;border-radius:20px;user-select:none;line-height:1.1;}
+  .pills label:hover{border-color:var(--slate);}
+  .pills input:checked + label{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .pills input.good:checked + label{background:var(--green);border-color:var(--green);color:#fff;}
+  .pills input.bad:checked + label{background:var(--red);border-color:var(--red);color:#fff;}
 
   .photos{display:flex;flex-wrap:wrap;gap:12px;}
   .pcard{flex:0 0 calc(33.33% - 8px);min-width:150px;}
@@ -107,23 +115,19 @@
   .foot b{color:var(--navy);}
   [contenteditable]:empty:before{content:attr(data-ph);color:#b6bdc9;font-style:italic;}
 
-  /* horizontal-scroll wrapper so wide DATA tables stay tables on small screens */
   .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
 
-  /* ---- iPad / tablet ---- */
   @media screen and (max-width:900px){
     .sheet{width:100%;margin:0;}
     .pad{padding:22px 18px 26px;}
     .top .logo{font-size:26px;}
     .tscroll:not(.g4wrap):not(.g2wrap) table.t{min-width:560px;}
   }
-  /* ---- phone ---- */
   @media screen and (max-width:560px){
     .pad{padding:16px 12px 22px;}
     .top{flex-direction:column;align-items:flex-start;gap:10px;}
     .top .rib{align-self:flex-start;text-align:left;}
     .doctitle{flex-direction:column;align-items:flex-start;}
-    /* field grids stack to one column (easy to fill by thumb) */
     .g4wrap,.g2wrap{overflow:visible;}
     .g4wrap .grid,.g4wrap .grid tbody,.g4wrap .grid tr,.g4wrap .grid td,
     .g2wrap .grid,.g2wrap .grid tbody,.g2wrap .grid tr,.g2wrap .grid td{display:block;width:100%!important;}
@@ -131,11 +135,10 @@
     .g4wrap .grid tr,.g2wrap .grid tr{border-bottom:2px solid var(--hair);}
     .flab{font-size:10px;} .fval{font-size:15px;min-height:24px;}
     .cell{font-size:14px;min-height:22px;}
-    .chip{font-size:12px;padding:6px 12px;}
-    .pill{font-size:12px;padding:8px 14px;}
+    .pills label{font-size:12px;padding:8px 14px;}
+    .seg label{width:30px;height:26px;font-size:12px;}
     .writebox{font-size:14px;}
     .pcard{flex:0 0 calc(50% - 6px);}
-    /* DATA tables keep horizontal scroll */
     .tscroll:not(.g4wrap):not(.g2wrap) table.t{min-width:540px;}
     .foot{flex-direction:column;align-items:flex-start;}
   }
@@ -152,7 +155,7 @@
     .photo .rm{display:none!important;}
     .sec,.grid,table.t tr,.photo,.sign{break-inside:avoid;}
     table.t thead{display:table-header-group;}
-    .top,.rule-amber,table.t thead th,.chip,.pill.on,.legend i,.sec .n,.rib{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .top,.rule-amber,table.t thead th,.seg input:checked + label,.pills input:checked + label,.legend i,.sec .n,.rib{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
     .fval:focus,.cell:focus,.writebox:focus{background:transparent;}
   }
 </style>
@@ -162,7 +165,7 @@
 <div class="toolbar">
   <button class="btn-print" onclick="window.print()">⤓ Imprimir / Guardar PDF</button>
   <button class="btn-ghost" onclick="location.reload()">Limpiar (recargar)</button>
-  <p class="hint">Uso interno del equipo · rellena, marca estados con clic, agrega fotos con nota · Imprime o guarda PDF para el expediente</p>
+  <p class="hint">Uso interno del equipo · toca los estados y opciones (funcionan sin conexión) · Imprime o guarda PDF para el expediente</p>
 </div>
 
 <section class="sheet">
@@ -178,7 +181,7 @@
       <div class="meta">Diagnóstico $59 · Reparación · Reemplazo · Mantenimiento</div>
     </div>
 
-    <!-- 1 · CITA -->
+    <!-- 1 -->
     <div class="sec"><span class="n">1</span><h2>Datos de la cita</h2></div>
     <div class="tscroll g4wrap"><table class="grid g4">
       <tr>
@@ -199,16 +202,14 @@
     </table></div>
     <div class="tscroll g2wrap"><table class="grid g2" style="border-top:none">
       <tr>
-        <td style="width:50%"><div class="flab">Origen del lead</div>
-          <div class="pills"><button class="pill" onclick="pick(this)">Meta</button><button class="pill" onclick="pick(this)">WhatsApp</button><button class="pill" onclick="pick(this)">Referido</button><button class="pill" onclick="pick(this)">Google</button><button class="pill" onclick="pick(this)">Otro</button></div></td>
-        <td style="width:50%"><div class="flab">Tipo de servicio</div>
-          <div class="pills"><button class="pill" onclick="pick(this)">Diagnóstico $59</button><button class="pill" onclick="pick(this)">Reparación AC</button><button class="pill" onclick="pick(this)">Reemplazo</button><button class="pill" onclick="pick(this)">Calefacción</button><button class="pill" onclick="pick(this)">Mantenimiento</button></div></td>
+        <td style="width:50%"><div class="flab">Origen del lead</div><span class="pills" role="radiogroup"><input type="radio" name="origen" id="origen_0"><label for="origen_0">Meta</label><input type="radio" name="origen" id="origen_1"><label for="origen_1">WhatsApp</label><input type="radio" name="origen" id="origen_2"><label for="origen_2">Referido</label><input type="radio" name="origen" id="origen_3"><label for="origen_3">Google</label><input type="radio" name="origen" id="origen_4"><label for="origen_4">Otro</label></span></td>
+        <td style="width:50%"><div class="flab">Tipo de servicio</div><span class="pills" role="radiogroup"><input type="radio" name="tipo" id="tipo_0"><label for="tipo_0">Diagnóstico $59</label><input type="radio" name="tipo" id="tipo_1"><label for="tipo_1">Reparación AC</label><input type="radio" name="tipo" id="tipo_2"><label for="tipo_2">Reemplazo</label><input type="radio" name="tipo" id="tipo_3"><label for="tipo_3">Calefacción</label><input type="radio" name="tipo" id="tipo_4"><label for="tipo_4">Mantenimiento</label></span></td>
       </tr>
     </table></div>
     <div style="margin-top:6px"><div class="flab" style="margin-bottom:4px">Síntoma reportado por el cliente</div>
       <div class="writebox" contenteditable="true" data-ph="¿Qué reporta? (no enfría, se apaga, ruido, gotea, congela, no prende…) · ¿desde cuándo?"></div></div>
 
-    <!-- 2 · EQUIPO -->
+    <!-- 2 -->
     <div class="sec"><span class="n">2</span><h2>Equipo / sistema</h2></div>
     <div class="tscroll g4wrap"><table class="grid g4">
       <tr>
@@ -229,7 +230,6 @@
         <td style="width:25%"><div class="flab">Breaker (amp)</div><div class="fval" contenteditable="true"></div></td>
       </tr>
     </table></div>
-
     <div style="margin-top:8px">
       <div class="flab" style="margin-bottom:5px">Placa de datos</div>
       <div class="photos" id="plate">
@@ -237,7 +237,7 @@
       </div>
     </div>
 
-    <!-- 3 · CONFIGURACIÓN -->
+    <!-- 3 -->
     <div class="sec"><span class="n">3</span><h2>Configuración del sistema</h2></div>
     <div class="tscroll g4wrap"><table class="grid g4">
       <tr>
@@ -254,47 +254,45 @@
       </tr>
     </table></div>
 
-    <!-- 4 · LECTURAS -->
+    <!-- 4 -->
     <div class="sec"><span class="n">4</span><h2>Lecturas técnicas (valores)</h2></div>
     <div class="tscroll"><table class="t">
       <thead><tr><th style="width:40%">Parámetro</th><th style="width:22%">Nominal / rated</th><th style="width:22%">Medido</th><th class="c" style="width:16%">Estado</th></tr></thead>
       <tbody>
-        <tr><td class="lbl">Voltaje L1–L2 (V)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true">230</div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td></tr>
-        <tr><td class="lbl">Amperaje compresor (A)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true" data-ph="RLA:"></div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td></tr>
-        <tr><td class="lbl">Amperaje ventilador ext. (A)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true" data-ph="FLA:"></div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td></tr>
-        <tr><td class="lbl">Capacitor compresor (µF)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true" data-ph="rated:"></div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td></tr>
-        <tr><td class="lbl">Capacitor ventilador (µF)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true" data-ph="rated:"></div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td></tr>
-        <tr><td class="lbl">Presión de succión (psi)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true"></div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td></tr>
-        <tr><td class="lbl">Presión de líquido (psi)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true"></div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td></tr>
-        <tr><td class="lbl">Supply temp (°F)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true"></div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td></tr>
-        <tr><td class="lbl">Return temp (°F)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true"></div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td></tr>
-        <tr><td class="lbl">Delta-T (°F)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true">14–22</div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td></tr>
-        <tr><td class="lbl">Superheat (°F)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true"></div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td></tr>
-        <tr><td class="lbl">Subcooling (°F)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true"></div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td></tr>
-        <tr><td class="lbl">Presión estática (inWC)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true"></div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td></tr>
-      </tbody>
+        <tr><td class="lbl">Voltaje L1–L2 (V)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true">230</div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><span class="seg"><input type="radio" name="r0" id="r0_ok" class="ok"><label for="r0_ok" title="Bien">✓</label><input type="radio" name="r0" id="r0_warn" class="warn"><label for="r0_warn" title="Atención">!</label><input type="radio" name="r0" id="r0_fail" class="fail"><label for="r0_fail" title="Falla">✕</label><input type="radio" name="r0" id="r0_na" class="na"><label for="r0_na" title="N/A">–</label></span></td></tr>
+        <tr><td class="lbl">Amperaje compresor (A)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true">RLA:</div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><span class="seg"><input type="radio" name="r1" id="r1_ok" class="ok"><label for="r1_ok" title="Bien">✓</label><input type="radio" name="r1" id="r1_warn" class="warn"><label for="r1_warn" title="Atención">!</label><input type="radio" name="r1" id="r1_fail" class="fail"><label for="r1_fail" title="Falla">✕</label><input type="radio" name="r1" id="r1_na" class="na"><label for="r1_na" title="N/A">–</label></span></td></tr>
+        <tr><td class="lbl">Amperaje ventilador ext. (A)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true">FLA:</div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><span class="seg"><input type="radio" name="r2" id="r2_ok" class="ok"><label for="r2_ok" title="Bien">✓</label><input type="radio" name="r2" id="r2_warn" class="warn"><label for="r2_warn" title="Atención">!</label><input type="radio" name="r2" id="r2_fail" class="fail"><label for="r2_fail" title="Falla">✕</label><input type="radio" name="r2" id="r2_na" class="na"><label for="r2_na" title="N/A">–</label></span></td></tr>
+        <tr><td class="lbl">Capacitor compresor (µF)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true">rated:</div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><span class="seg"><input type="radio" name="r3" id="r3_ok" class="ok"><label for="r3_ok" title="Bien">✓</label><input type="radio" name="r3" id="r3_warn" class="warn"><label for="r3_warn" title="Atención">!</label><input type="radio" name="r3" id="r3_fail" class="fail"><label for="r3_fail" title="Falla">✕</label><input type="radio" name="r3" id="r3_na" class="na"><label for="r3_na" title="N/A">–</label></span></td></tr>
+        <tr><td class="lbl">Capacitor ventilador (µF)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true">rated:</div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><span class="seg"><input type="radio" name="r4" id="r4_ok" class="ok"><label for="r4_ok" title="Bien">✓</label><input type="radio" name="r4" id="r4_warn" class="warn"><label for="r4_warn" title="Atención">!</label><input type="radio" name="r4" id="r4_fail" class="fail"><label for="r4_fail" title="Falla">✕</label><input type="radio" name="r4" id="r4_na" class="na"><label for="r4_na" title="N/A">–</label></span></td></tr>
+        <tr><td class="lbl">Presión de succión (psi)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true"></div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><span class="seg"><input type="radio" name="r5" id="r5_ok" class="ok"><label for="r5_ok" title="Bien">✓</label><input type="radio" name="r5" id="r5_warn" class="warn"><label for="r5_warn" title="Atención">!</label><input type="radio" name="r5" id="r5_fail" class="fail"><label for="r5_fail" title="Falla">✕</label><input type="radio" name="r5" id="r5_na" class="na"><label for="r5_na" title="N/A">–</label></span></td></tr>
+        <tr><td class="lbl">Presión de líquido (psi)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true"></div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><span class="seg"><input type="radio" name="r6" id="r6_ok" class="ok"><label for="r6_ok" title="Bien">✓</label><input type="radio" name="r6" id="r6_warn" class="warn"><label for="r6_warn" title="Atención">!</label><input type="radio" name="r6" id="r6_fail" class="fail"><label for="r6_fail" title="Falla">✕</label><input type="radio" name="r6" id="r6_na" class="na"><label for="r6_na" title="N/A">–</label></span></td></tr>
+        <tr><td class="lbl">Supply temp (°F)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true"></div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><span class="seg"><input type="radio" name="r7" id="r7_ok" class="ok"><label for="r7_ok" title="Bien">✓</label><input type="radio" name="r7" id="r7_warn" class="warn"><label for="r7_warn" title="Atención">!</label><input type="radio" name="r7" id="r7_fail" class="fail"><label for="r7_fail" title="Falla">✕</label><input type="radio" name="r7" id="r7_na" class="na"><label for="r7_na" title="N/A">–</label></span></td></tr>
+        <tr><td class="lbl">Return temp (°F)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true"></div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><span class="seg"><input type="radio" name="r8" id="r8_ok" class="ok"><label for="r8_ok" title="Bien">✓</label><input type="radio" name="r8" id="r8_warn" class="warn"><label for="r8_warn" title="Atención">!</label><input type="radio" name="r8" id="r8_fail" class="fail"><label for="r8_fail" title="Falla">✕</label><input type="radio" name="r8" id="r8_na" class="na"><label for="r8_na" title="N/A">–</label></span></td></tr>
+        <tr><td class="lbl">Delta-T (°F)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true">14–22</div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><span class="seg"><input type="radio" name="r9" id="r9_ok" class="ok"><label for="r9_ok" title="Bien">✓</label><input type="radio" name="r9" id="r9_warn" class="warn"><label for="r9_warn" title="Atención">!</label><input type="radio" name="r9" id="r9_fail" class="fail"><label for="r9_fail" title="Falla">✕</label><input type="radio" name="r9" id="r9_na" class="na"><label for="r9_na" title="N/A">–</label></span></td></tr>
+        <tr><td class="lbl">Superheat (°F)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true"></div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><span class="seg"><input type="radio" name="r10" id="r10_ok" class="ok"><label for="r10_ok" title="Bien">✓</label><input type="radio" name="r10" id="r10_warn" class="warn"><label for="r10_warn" title="Atención">!</label><input type="radio" name="r10" id="r10_fail" class="fail"><label for="r10_fail" title="Falla">✕</label><input type="radio" name="r10" id="r10_na" class="na"><label for="r10_na" title="N/A">–</label></span></td></tr>
+        <tr><td class="lbl">Subcooling (°F)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true"></div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><span class="seg"><input type="radio" name="r11" id="r11_ok" class="ok"><label for="r11_ok" title="Bien">✓</label><input type="radio" name="r11" id="r11_warn" class="warn"><label for="r11_warn" title="Atención">!</label><input type="radio" name="r11" id="r11_fail" class="fail"><label for="r11_fail" title="Falla">✕</label><input type="radio" name="r11" id="r11_na" class="na"><label for="r11_na" title="N/A">–</label></span></td></tr>
+        <tr><td class="lbl">Presión estática (inWC)</td><td data-m="Nominal / rated"><div class="cell" contenteditable="true"></div></td><td data-m="Medido"><div class="cell" contenteditable="true"></div></td><td class="c"><span class="seg"><input type="radio" name="r12" id="r12_ok" class="ok"><label for="r12_ok" title="Bien">✓</label><input type="radio" name="r12" id="r12_warn" class="warn"><label for="r12_warn" title="Atención">!</label><input type="radio" name="r12" id="r12_fail" class="fail"><label for="r12_fail" title="Falla">✕</label><input type="radio" name="r12" id="r12_na" class="na"><label for="r12_na" title="N/A">–</label></span></td></tr></tbody>
     </table></div>
 
-    <!-- 5 · CHECKLIST -->
+    <!-- 5 -->
     <div class="sec"><span class="n">5</span><h2>Checklist de inspección</h2></div>
     <div class="tscroll"><table class="t">
-      <thead><tr><th style="width:34%">Punto</th><th class="c" style="width:20%">Estado</th><th style="width:46%">Nota / observación</th></tr></thead>
+      <thead><tr><th style="width:40%">Punto</th><th class="c" style="width:22%">Estado</th><th style="width:38%">Nota / observación</th></tr></thead>
       <tbody>
-        <tr><td class="lbl">Termostato y control</td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
-        <tr><td class="lbl">Filtro (limpio / sucio)</td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
-        <tr><td class="lbl">Evaporador (limpio / hielo)</td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
-        <tr><td class="lbl">Drenaje / bandeja de condensado</td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
-        <tr><td class="lbl">Blower / ventilador interior</td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
-        <tr><td class="lbl">Condensador (aletas / limpieza)</td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
-        <tr><td class="lbl">Ventilador exterior / motor</td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
-        <tr><td class="lbl">Contactor</td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
-        <tr><td class="lbl">Capacitor</td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
-        <tr><td class="lbl">Compresor</td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
-        <tr><td class="lbl">Cableado / conexiones eléctricas</td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
-        <tr><td class="lbl">Carga de refrigerante</td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
-        <tr><td class="lbl">Señales de fuga</td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
-        <tr><td class="lbl">Flujo de aire / registros</td><td class="c"><button class="chip" data-v="none" onclick="cyc(this)">—</button></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
-      </tbody>
+        <tr><td class="lbl">Termostato y control</td><td class="c"><span class="seg"><input type="radio" name="c0" id="c0_ok" class="ok"><label for="c0_ok" title="Bien">✓</label><input type="radio" name="c0" id="c0_warn" class="warn"><label for="c0_warn" title="Atención">!</label><input type="radio" name="c0" id="c0_fail" class="fail"><label for="c0_fail" title="Falla">✕</label><input type="radio" name="c0" id="c0_na" class="na"><label for="c0_na" title="N/A">–</label></span></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
+        <tr><td class="lbl">Filtro (limpio / sucio)</td><td class="c"><span class="seg"><input type="radio" name="c1" id="c1_ok" class="ok"><label for="c1_ok" title="Bien">✓</label><input type="radio" name="c1" id="c1_warn" class="warn"><label for="c1_warn" title="Atención">!</label><input type="radio" name="c1" id="c1_fail" class="fail"><label for="c1_fail" title="Falla">✕</label><input type="radio" name="c1" id="c1_na" class="na"><label for="c1_na" title="N/A">–</label></span></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
+        <tr><td class="lbl">Evaporador (limpio / hielo)</td><td class="c"><span class="seg"><input type="radio" name="c2" id="c2_ok" class="ok"><label for="c2_ok" title="Bien">✓</label><input type="radio" name="c2" id="c2_warn" class="warn"><label for="c2_warn" title="Atención">!</label><input type="radio" name="c2" id="c2_fail" class="fail"><label for="c2_fail" title="Falla">✕</label><input type="radio" name="c2" id="c2_na" class="na"><label for="c2_na" title="N/A">–</label></span></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
+        <tr><td class="lbl">Drenaje / bandeja de condensado</td><td class="c"><span class="seg"><input type="radio" name="c3" id="c3_ok" class="ok"><label for="c3_ok" title="Bien">✓</label><input type="radio" name="c3" id="c3_warn" class="warn"><label for="c3_warn" title="Atención">!</label><input type="radio" name="c3" id="c3_fail" class="fail"><label for="c3_fail" title="Falla">✕</label><input type="radio" name="c3" id="c3_na" class="na"><label for="c3_na" title="N/A">–</label></span></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
+        <tr><td class="lbl">Blower / ventilador interior</td><td class="c"><span class="seg"><input type="radio" name="c4" id="c4_ok" class="ok"><label for="c4_ok" title="Bien">✓</label><input type="radio" name="c4" id="c4_warn" class="warn"><label for="c4_warn" title="Atención">!</label><input type="radio" name="c4" id="c4_fail" class="fail"><label for="c4_fail" title="Falla">✕</label><input type="radio" name="c4" id="c4_na" class="na"><label for="c4_na" title="N/A">–</label></span></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
+        <tr><td class="lbl">Condensador (aletas / limpieza)</td><td class="c"><span class="seg"><input type="radio" name="c5" id="c5_ok" class="ok"><label for="c5_ok" title="Bien">✓</label><input type="radio" name="c5" id="c5_warn" class="warn"><label for="c5_warn" title="Atención">!</label><input type="radio" name="c5" id="c5_fail" class="fail"><label for="c5_fail" title="Falla">✕</label><input type="radio" name="c5" id="c5_na" class="na"><label for="c5_na" title="N/A">–</label></span></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
+        <tr><td class="lbl">Ventilador exterior / motor</td><td class="c"><span class="seg"><input type="radio" name="c6" id="c6_ok" class="ok"><label for="c6_ok" title="Bien">✓</label><input type="radio" name="c6" id="c6_warn" class="warn"><label for="c6_warn" title="Atención">!</label><input type="radio" name="c6" id="c6_fail" class="fail"><label for="c6_fail" title="Falla">✕</label><input type="radio" name="c6" id="c6_na" class="na"><label for="c6_na" title="N/A">–</label></span></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
+        <tr><td class="lbl">Contactor</td><td class="c"><span class="seg"><input type="radio" name="c7" id="c7_ok" class="ok"><label for="c7_ok" title="Bien">✓</label><input type="radio" name="c7" id="c7_warn" class="warn"><label for="c7_warn" title="Atención">!</label><input type="radio" name="c7" id="c7_fail" class="fail"><label for="c7_fail" title="Falla">✕</label><input type="radio" name="c7" id="c7_na" class="na"><label for="c7_na" title="N/A">–</label></span></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
+        <tr><td class="lbl">Capacitor</td><td class="c"><span class="seg"><input type="radio" name="c8" id="c8_ok" class="ok"><label for="c8_ok" title="Bien">✓</label><input type="radio" name="c8" id="c8_warn" class="warn"><label for="c8_warn" title="Atención">!</label><input type="radio" name="c8" id="c8_fail" class="fail"><label for="c8_fail" title="Falla">✕</label><input type="radio" name="c8" id="c8_na" class="na"><label for="c8_na" title="N/A">–</label></span></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
+        <tr><td class="lbl">Compresor</td><td class="c"><span class="seg"><input type="radio" name="c9" id="c9_ok" class="ok"><label for="c9_ok" title="Bien">✓</label><input type="radio" name="c9" id="c9_warn" class="warn"><label for="c9_warn" title="Atención">!</label><input type="radio" name="c9" id="c9_fail" class="fail"><label for="c9_fail" title="Falla">✕</label><input type="radio" name="c9" id="c9_na" class="na"><label for="c9_na" title="N/A">–</label></span></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
+        <tr><td class="lbl">Cableado / conexiones eléctricas</td><td class="c"><span class="seg"><input type="radio" name="c10" id="c10_ok" class="ok"><label for="c10_ok" title="Bien">✓</label><input type="radio" name="c10" id="c10_warn" class="warn"><label for="c10_warn" title="Atención">!</label><input type="radio" name="c10" id="c10_fail" class="fail"><label for="c10_fail" title="Falla">✕</label><input type="radio" name="c10" id="c10_na" class="na"><label for="c10_na" title="N/A">–</label></span></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
+        <tr><td class="lbl">Carga de refrigerante</td><td class="c"><span class="seg"><input type="radio" name="c11" id="c11_ok" class="ok"><label for="c11_ok" title="Bien">✓</label><input type="radio" name="c11" id="c11_warn" class="warn"><label for="c11_warn" title="Atención">!</label><input type="radio" name="c11" id="c11_fail" class="fail"><label for="c11_fail" title="Falla">✕</label><input type="radio" name="c11" id="c11_na" class="na"><label for="c11_na" title="N/A">–</label></span></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
+        <tr><td class="lbl">Señales de fuga</td><td class="c"><span class="seg"><input type="radio" name="c12" id="c12_ok" class="ok"><label for="c12_ok" title="Bien">✓</label><input type="radio" name="c12" id="c12_warn" class="warn"><label for="c12_warn" title="Atención">!</label><input type="radio" name="c12" id="c12_fail" class="fail"><label for="c12_fail" title="Falla">✕</label><input type="radio" name="c12" id="c12_na" class="na"><label for="c12_na" title="N/A">–</label></span></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr>
+        <tr><td class="lbl">Flujo de aire / registros</td><td class="c"><span class="seg"><input type="radio" name="c13" id="c13_ok" class="ok"><label for="c13_ok" title="Bien">✓</label><input type="radio" name="c13" id="c13_warn" class="warn"><label for="c13_warn" title="Atención">!</label><input type="radio" name="c13" id="c13_fail" class="fail"><label for="c13_fail" title="Falla">✕</label><input type="radio" name="c13" id="c13_na" class="na"><label for="c13_na" title="N/A">–</label></span></td><td data-m="Nota"><div class="cell" contenteditable="true"></div></td></tr></tbody>
     </table></div>
     <div class="legend">
       <span><i style="background:var(--green)"></i>Bien</span>
@@ -303,7 +301,7 @@
       <span><i style="background:var(--slate)"></i>N/A</span>
     </div>
 
-    <!-- 6 · DIAGNÓSTICO -->
+    <!-- 6 -->
     <div class="sec"><span class="n">6</span><h2>Hallazgo / diagnóstico</h2></div>
     <div class="tscroll g2wrap"><table class="grid g2">
       <tr>
@@ -311,11 +309,10 @@
         <td style="width:50%"><div class="flab">Componente(s) afectado(s)</div><div class="fval" contenteditable="true"></div></td>
       </tr>
     </table></div>
-    <div style="margin:7px 0 4px"><div class="flab" style="margin-bottom:4px">Veredicto</div>
-      <div class="pills"><button class="pill" onclick="pick(this)">Reparar</button><button class="pill" onclick="pick(this)">Reemplazar</button><button class="pill" onclick="pick(this)">Mantenimiento</button><button class="pill" onclick="pick(this)">Monitorear</button></div></div>
+    <div style="margin:7px 0 4px"><div class="flab" style="margin-bottom:4px">Veredicto</div><span class="pills" role="radiogroup"><input type="radio" name="veredicto" id="veredicto_0"><label for="veredicto_0">Reparar</label><input type="radio" name="veredicto" id="veredicto_1"><label for="veredicto_1">Reemplazar</label><input type="radio" name="veredicto" id="veredicto_2"><label for="veredicto_2">Mantenimiento</label><input type="radio" name="veredicto" id="veredicto_3"><label for="veredicto_3">Monitorear</label></span></div>
     <div class="writebox" contenteditable="true" data-ph="Descripción técnica del hallazgo, evidencia y razonamiento…"></div>
 
-    <!-- 7 · IMÁGENES -->
+    <!-- 7 -->
     <div class="sec"><span class="n">7</span><h2>Registro de imágenes</h2></div>
     <div class="photos" id="photos">
       <div class="pcard"><div class="photo" onclick="tileClick(event,this)"><span>Clic para subir foto</span><button type="button" class="rm" onclick="rmPhoto(event,this)">✕</button><input type="file" accept="image/*" onchange="loadPhoto(this)"></div><input class="pcap" type="text" placeholder="Nota: ¿qué muestra la foto?"></div>
@@ -324,7 +321,7 @@
     </div>
     <button class="addbtn no-print" onclick="addPhoto()">+ Agregar foto</button>
 
-    <!-- 8 · PARTES -->
+    <!-- 8 -->
     <div class="sec"><span class="n">8</span><h2>Partes / materiales necesarios</h2></div>
     <div class="tscroll"><table class="t" id="partsTbl">
       <thead><tr><th style="width:40%">Parte / material</th><th class="c" style="width:14%">Cant.</th><th style="width:24%">N° de parte</th><th style="width:22%">Notas</th></tr></thead>
@@ -332,31 +329,30 @@
         <tr><td data-m="Parte / material"><div class="cell" contenteditable="true"></div></td><td class="c" data-m="Cant."><div class="cell" contenteditable="true"></div></td><td data-m="N° de parte"><div class="cell" contenteditable="true"></div></td><td data-m="Notas"><div class="cell" contenteditable="true"></div></td></tr>
         <tr><td data-m="Parte / material"><div class="cell" contenteditable="true"></div></td><td class="c" data-m="Cant."><div class="cell" contenteditable="true"></div></td><td data-m="N° de parte"><div class="cell" contenteditable="true"></div></td><td data-m="Notas"><div class="cell" contenteditable="true"></div></td></tr>
         <tr><td data-m="Parte / material"><div class="cell" contenteditable="true"></div></td><td class="c" data-m="Cant."><div class="cell" contenteditable="true"></div></td><td data-m="N° de parte"><div class="cell" contenteditable="true"></div></td><td data-m="Notas"><div class="cell" contenteditable="true"></div></td></tr>
-        <tr><td data-m="Parte / material"><div class="cell" contenteditable="true"></div></td><td class="c" data-m="Cant."><div class="cell" contenteditable="true"></div></td><td data-m="N° de parte"><div class="cell" contenteditable="true"></div></td><td data-m="Notas"><div class="cell" contenteditable="true"></div></td></tr>
-      </tbody>
+        <tr><td data-m="Parte / material"><div class="cell" contenteditable="true"></div></td><td class="c" data-m="Cant."><div class="cell" contenteditable="true"></div></td><td data-m="N° de parte"><div class="cell" contenteditable="true"></div></td><td data-m="Notas"><div class="cell" contenteditable="true"></div></td></tr></tbody>
     </table></div>
     <button class="addbtn no-print" onclick="addPartRow()" style="border-style:solid;border-width:1px">+ Agregar fila</button>
 
-    <!-- 9 · PRÓXIMOS PASOS -->
+    <!-- 9 -->
     <div class="sec"><span class="n">9</span><h2>Próximos pasos / venta</h2></div>
     <div class="tscroll g4wrap"><table class="grid g4">
       <tr>
         <td style="width:25%"><div class="flab">Cotización entregada ($)</div><div class="fval" contenteditable="true"></div></td>
-        <td style="width:25%"><div class="flab">$59 acreditado</div><div class="pills"><button class="pill" onclick="pick(this,'good')">Sí</button><button class="pill" onclick="pick(this,'bad')">No</button></div></td>
-        <td style="width:25%"><div class="flab">Cliente aprobó</div><div class="pills"><button class="pill" onclick="pick(this,'good')">Sí</button><button class="pill" onclick="pick(this,'bad')">No</button><button class="pill" onclick="pick(this)">Pend.</button></div></td>
+        <td style="width:25%"><div class="flab">$59 acreditado</div><span class="pills" role="radiogroup"><input type="radio" name="p59" id="p59_0" class="good"><label for="p59_0">Sí</label><input type="radio" name="p59" id="p59_1" class="bad"><label for="p59_1">No</label></span></td>
+        <td style="width:25%"><div class="flab">Cliente aprobó</div><span class="pills" role="radiogroup"><input type="radio" name="aprobo" id="aprobo_0" class="good"><label for="aprobo_0">Sí</label><input type="radio" name="aprobo" id="aprobo_1" class="bad"><label for="aprobo_1">No</label><input type="radio" name="aprobo" id="aprobo_2"><label for="aprobo_2">Pend.</label></span></td>
         <td style="width:25%"><div class="flab">Seguimiento (fecha)</div><div class="fval" contenteditable="true"></div></td>
       </tr>
       <tr>
-        <td style="width:25%"><div class="flab">Financiamiento ofrecido</div><div class="pills"><button class="pill" onclick="pick(this,'good')">Sí</button><button class="pill" onclick="pick(this,'bad')">No</button></div></td>
-        <td style="width:25%"><div class="flab">Membresía ofrecida</div><div class="pills"><button class="pill" onclick="pick(this,'good')">Sí</button><button class="pill" onclick="pick(this,'bad')">No</button></div></td>
-        <td style="width:25%"><div class="flab">Reseña solicitada</div><div class="pills"><button class="pill" onclick="pick(this,'good')">Sí</button><button class="pill" onclick="pick(this,'bad')">No</button></div></td>
-        <td style="width:25%"><div class="flab">Mismo día</div><div class="pills"><button class="pill" onclick="pick(this,'good')">Sí</button><button class="pill" onclick="pick(this,'bad')">No</button></div></td>
+        <td style="width:25%"><div class="flab">Financiamiento ofrecido</div><span class="pills" role="radiogroup"><input type="radio" name="financ" id="financ_0" class="good"><label for="financ_0">Sí</label><input type="radio" name="financ" id="financ_1" class="bad"><label for="financ_1">No</label></span></td>
+        <td style="width:25%"><div class="flab">Membresía ofrecida</div><span class="pills" role="radiogroup"><input type="radio" name="memb" id="memb_0" class="good"><label for="memb_0">Sí</label><input type="radio" name="memb" id="memb_1" class="bad"><label for="memb_1">No</label></span></td>
+        <td style="width:25%"><div class="flab">Reseña solicitada</div><span class="pills" role="radiogroup"><input type="radio" name="resena" id="resena_0" class="good"><label for="resena_0">Sí</label><input type="radio" name="resena" id="resena_1" class="bad"><label for="resena_1">No</label></span></td>
+        <td style="width:25%"><div class="flab">Mismo día</div><span class="pills" role="radiogroup"><input type="radio" name="mismo" id="mismo_0" class="good"><label for="mismo_0">Sí</label><input type="radio" name="mismo" id="mismo_1" class="bad"><label for="mismo_1">No</label></span></td>
       </tr>
     </table></div>
     <div style="margin-top:6px"><div class="flab" style="margin-bottom:4px">Notas internas</div>
       <div class="writebox" contenteditable="true" data-ph="Contexto, oportunidad de upsell, acceso, mascotas, particularidades del sitio, pendientes…"></div></div>
 
-    <!-- 10 · CIERRE -->
+    <!-- 10 -->
     <div class="sec"><span class="n">10</span><h2>Cierre</h2></div>
     <div class="sign">
       <div class="s"><div class="line"></div><div class="cap">Firma del técnico</div></div>
@@ -372,16 +368,7 @@
 </section>
 
 <script>
-  var ORDER=['none','ok','warn','fail','na'];
-  var LBL={none:'—',ok:'Bien',warn:'Atención',fail:'Falla',na:'N/A'};
-  function cyc(b){var i=ORDER.indexOf(b.dataset.v); b.dataset.v=ORDER[(i+1)%ORDER.length]; b.textContent=LBL[b.dataset.v];}
-
-  function pick(btn,cls){
-    var grp=btn.parentElement;
-    grp.querySelectorAll('.pill').forEach(function(p){p.classList.remove('on','good','bad');});
-    btn.classList.add('on'); if(cls) btn.classList.add(cls);
-  }
-
+  // Only progressive enhancements need JS (add photo/row, photo upload). Core selections are native.
   function addPartRow(){
     var tb=document.querySelector('#partsTbl tbody');
     var tr=document.createElement('tr');
@@ -391,22 +378,18 @@
       +'<td data-m="Notas"><div class="cell" contenteditable="true"></div></td>';
     tb.appendChild(tr);
   }
-
   function tileClick(ev,tile){ if(ev.target.classList.contains('rm')) return; tile.querySelector('input[type=file]').click(); }
   function loadPhoto(input){
     var f=input.files[0]; if(!f)return; var r=new FileReader();
-    r.onload=function(e){
-      var tile=input.parentElement; tile.classList.add('filled');
+    r.onload=function(e){ var tile=input.parentElement; tile.classList.add('filled');
       tile.closest('.pcard').classList.add('has-photo');
       tile.querySelectorAll('span').forEach(function(s){s.style.display='none';});
       var img=tile.querySelector('img')||document.createElement('img'); img.src=e.target.result;
-      if(!img.parentElement) tile.insertBefore(img,input);
-    };
+      if(!img.parentElement) tile.insertBefore(img,input); };
     r.readAsDataURL(f);
   }
   function rmPhoto(ev,btn){
-    ev.stopPropagation(); ev.preventDefault();
-    var card=btn.closest('.pcard');
+    ev.stopPropagation(); ev.preventDefault(); var card=btn.closest('.pcard');
     if(document.querySelectorAll('#photos .pcard').length>3){ card.remove(); return; }
     var tile=card.querySelector('.photo'); tile.classList.remove('filled'); card.classList.remove('has-photo');
     var img=tile.querySelector('img'); if(img) img.remove();
